@@ -8,7 +8,7 @@ def read_data(filename):
     """
     Function to read data from a BSON file
     """
-    bs = open(f'../trictrac_data/{filename}', 'rb').read()
+    bs = open(f'../data/trictrac/{filename}', 'rb').read()
 
     # List to store decoded data
     dicts = []
