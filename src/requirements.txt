@@ -1,0 +1,5 @@
+pymongo
+bson
+numpy
+pandas
+seaborn
