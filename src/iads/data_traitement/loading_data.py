@@ -2,6 +2,7 @@ import bson
 import csv
 import pandas as pd
 import os.path
+import sys
 
 
 def read_data(filename):
@@ -45,12 +46,17 @@ def load_dataframe(filename):
     """
     Function to load data into a dataframe
     """
+
+    encodage = None
+    if sys.platform == "win32":
+        encodage = 'cp1252'
+
     # Get base file name
     base_filename = filename.split(".")[0]
 
     # If csv already exists
     if os.path.exists(f"../data/{base_filename}.csv"):
-        return pd.read_csv(f"../data/{base_filename}.csv", encoding="cp1252")
+        return pd.read_csv(f"../data/{base_filename}.csv", encoding=encodage)
 
     # Read data from BSON file
     data = read_data(filename)
@@ -62,7 +68,7 @@ def load_dataframe(filename):
     dump_dicts_to_csv(data, schema, f"../data/{base_filename}.csv")
 
     # Load data into dataframe
-    df = pd.read_csv(f"../data/{base_filename}.csv", encoding="cp1252")
+    df = pd.read_csv(f"../data/{base_filename}.csv", encoding=encodage)
 
     # Check data consistency
     assert df.shape[0] == len(data), "Error loading data"
