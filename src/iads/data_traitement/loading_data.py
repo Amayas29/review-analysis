@@ -50,7 +50,7 @@ def load_dataframe(filename):
 
     # If csv already exists
     if os.path.exists(f"../data/{base_filename}.csv"):
-        return pd.read_csv(f"../data/{base_filename}.csv")
+        return pd.read_csv(f"../data/{base_filename}.csv", encoding="cp1252")
 
     # Read data from BSON file
     data = read_data(filename)
@@ -62,7 +62,7 @@ def load_dataframe(filename):
     dump_dicts_to_csv(data, schema, f"../data/{base_filename}.csv")
 
     # Load data into dataframe
-    df = pd.read_csv(f"../data/{base_filename}.csv")
+    df = pd.read_csv(f"../data/{base_filename}.csv", encoding="cp1252")
 
     # Check data consistency
     assert df.shape[0] == len(data), "Error loading data"
