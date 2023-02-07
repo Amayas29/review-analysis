@@ -8,7 +8,6 @@ __pycache__/
 
 # Data
 data/
-trictrac_data/
 
 # Distribution / packaging
 .Python
