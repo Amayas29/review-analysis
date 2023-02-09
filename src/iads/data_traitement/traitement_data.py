@@ -3,10 +3,11 @@ import numpy as np
 
 
 def update_title_jeux(arr):
-    title = arr["titre"]
-    title = re.sub(
-        r'https://www.trictrac.net/jeu-de-societe/(.*)/?.*', r'\1', arr["url"])
-    return title
+    try:
+        tmp = arr["title"]
+        return re.sub(r'https://www.trictrac.net/jeu-de-societe/(.*)/.*', r'\1', arr["url"])
+    except:
+        return re.sub(r'https://www.trictrac.net/jeu-de-societe/(.*)', r'\1', arr["url"])
 
 
 def parse_casting(castings):
@@ -73,3 +74,11 @@ def extract_distributors(arr):
             return distributors
 
     return distributors
+
+def extract_years(arr):
+    match = re.search(r"\b\d{4}\b", arr["date_published"])
+
+    if match:
+        year = match.group()
+        return year
+    return np.NaN
