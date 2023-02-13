@@ -56,7 +56,7 @@ def load_dataframe(filename):
 
     # If csv already exists
     if os.path.exists(f"../data/{base_filename}.csv"):
-        return pd.read_csv(f"../data/{base_filename}.csv", encoding=encodage)
+        return pd.read_csv(f"../data/{base_filename}.csv")
 
     # Read data from BSON file
     data = read_data(filename)
