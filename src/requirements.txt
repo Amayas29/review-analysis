@@ -3,3 +3,7 @@ bson
 numpy
 pandas
 seaborn
+nltk
+wordcloud
+sklearn
+matplotlib
