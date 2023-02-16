@@ -164,3 +164,63 @@ def extract_categories(arr):
         return np.array([])
 
     return np.array(arr["categories"].split("|"))
+
+
+def onehot_ages(arr):
+
+    arr["enfant"] = 0
+    arr["ado"] = 0
+    arr["adulte"] = 0
+
+    try:
+        age_req = arr["age_required"].split("-")
+        min_a = int(age_req[0])
+        max_a = int(age_req[1])
+
+        if min_a > max_a:
+            max_a = 99
+
+        if min_a < 6:
+            arr["enfant"] = 1
+
+        if min_a < 16 and max_a > 7:
+            arr["ado"] = 1
+
+        if max_a > 17:
+            arr["adulte"] = 1
+
+        return arr
+
+    except Exception:
+        arr["enfant"] = 1
+        arr["ado"] = 1
+        arr["adulte"] = 1
+
+        return arr
+
+
+def onehot_playes(arr):
+
+    arr["solo"] = 0
+    arr["multi"] = 0
+
+    try:
+        players = arr["nb_players"].split("-")
+        min_j = int(players[0])
+        max_j = int(players[1])
+
+        if min_j > max_j:
+            max_j = 99
+
+        if min_j == 1:
+            arr["solo"] = 1
+
+        if max_j > 1:
+            arr["multi"] = 1
+
+        return arr
+
+    except Exception:
+        arr["multi"] = 1
+        arr["solo"] = 1
+        return arr
