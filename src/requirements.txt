@@ -4,6 +4,7 @@ numpy
 pandas
 seaborn
 nltk
+spacy
 wordcloud
 sklearn
 matplotlib
