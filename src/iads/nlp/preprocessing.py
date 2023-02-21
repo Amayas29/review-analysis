@@ -13,7 +13,7 @@ def clean_text(text, cat=True):
 
     if cat:
         # Pour le tokenizer des categories
-        text = re.sub("['-/]", " ", text)
+        text = re.sub("['-/\n]", " ", text)
 
         # Pour garder le mot dé lors la suppression des stop words
         text = re.sub(r"\bdé\b", "dE", text)
@@ -37,6 +37,9 @@ def tokenize_text(text):
 CAT_STOP_WORDS = set(map(clean_text,
                          (set(map(lambda sw: sw.replace("'", ""), STOP_WORDS)) - {"autres", "autre"}).union({"jeu", "jeux", "jouer", "etes", "secret", "collectionner"}))
                      )
+
+DESC_STOP_WORDS = set(map(clean_text, (set(map(lambda sw: sw.replace("'", ""), STOP_WORDS))).union(
+    {"jeu", "jeux", "jouer", "etes"})))
 
 
 def remove_stopwords(tokens, stop_words=CAT_STOP_WORDS):
