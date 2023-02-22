@@ -8,3 +8,6 @@ spacy
 wordcloud
 sklearn
 matplotlib
+langdetect
+translate
+tqdm
