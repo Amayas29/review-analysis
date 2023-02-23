@@ -3,7 +3,7 @@
 ## Semaine 1 (6/02) -- Prétraitement des données
 
 Avancement :
-- One hot encoding sur le casting (créateur, illustrateur, editeur, distributeur)
+- Extractions des informations du casting (créateur, illustrateur, editeur, distributeur)
 - Séparer le game-play en 3 colonnes : nb joueurs, âge, temps de jeu
 - One hot encoding sur l'âge (enfant, ado, adulte)
 - Suppression des url
@@ -29,7 +29,7 @@ Remarques :
 ## Semaine 2 (13/02) -- Suite prétraitement des données et statistiques
 Avancement :
 - Statistiques sur les avis et les jeux (cf. stats_avis et stats_jeux)
-- Wordcloud des avis e
+- Wordcloud des avis
 
 Problèmes rencontrés :
 - Beaucoup de jeux avec une note nulle (35%)
@@ -45,7 +45,6 @@ Remarques :
 - La note Finkel est une combinaison linéaire entre la note et le nombre d'avis d'un jeu
 
 **Réunion** :
-- (Conseils pour l'autre groupe mais intéressants : possibilité d'abandonner des reviews positives pour gérer l'équilibre des classes, sinon médiane à 8 + normalisation des notes de -1 à 1 pour la régression linéaire + faire varier le vocab pour voir les différentes performances + F1 score plus adapté aux classes déséquilibrées que l'accuracy + utiliser Kmeans dans un espace plus faible, avec un dictionnaire plus restreint, pas adapté ici)
 - Ajouter une catégorie "duo" plutôt que juste "solo" et "multijoueurs"
 - Durée de jeu : enlever estimation de densité
 - Clusterisation des catégories de jeux à partir des tags sur les catégories (= réduction de la dimension sur le nombre de tags)
@@ -54,10 +53,12 @@ Remarques :
 
 ## Semaine 3 (20/02) -- Clustering et prédiction
 Avancement :
-- Clustering catégories : kmeans (fusionne certaines catégories)
+- Clustering syntaxique des catégories : kmeans (fusionne certaines catégories)
 - Test de deux mesures (importance et fréquence) : la fréquence donne de meilleurs résultats, on l'utilise pour ne garder qu'une seule catégorie pour les jeux qui en ont plusieurs
-- Supprimer catégories qui apparaissent moins de 6 fois
-- Supprimer les descriptions avec un nombre de caractères inférieur à un certain seuil
+- Supprimer les catégories qui apparaissent moins de 6 fois
+- Supprimer les descriptions de langue etrangeres avec un nombre de mots superieur à un certain seuil
+- Nettoyage des descriptions (stopwords, ponctuation, lemmatization ...)
+- Prédiction de la catégorie à partir de la descriptions (en utilisant Naive bayes, SVM et Random Forest)
 
 Problèmes rencontrés :
 - Certaines descriptions en anglais
@@ -67,9 +68,9 @@ Problèmes rencontrés :
 Solutions trouvées :
 - Détecter la langue des descriptions
 - Remplacer "Aucune description" par un NaN
-- Se débarrasser des descriptions écrites dans une langue étrangère
+- Se débarrasser des longues descriptions écrites dans une langue étrangère
 
 Remarques :
-- Certains jeux n'ont ni catégorie ni description (env 200), on les supprimera
+- Certains jeux n'ont ni catégorie ni description (env 200)
 
 
