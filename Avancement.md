@@ -58,7 +58,7 @@ Avancement :
 - Supprimer les catégories qui apparaissent moins de 6 fois
 - Supprimer les descriptions de langue etrangeres avec un nombre de mots superieur à un certain seuil
 - Nettoyage des descriptions (stopwords, ponctuation, lemmatization ...)
-- Prédiction de la catégorie à partir de la descriptions (en utilisant Naive bayes, SVM et Random Forest)
+- Prédiction de la catégorie à partir de la description (en utilisant Naive bayes, SVM et Random Forest)
 
 Problèmes rencontrés :
 - Certaines descriptions en anglais
@@ -72,5 +72,19 @@ Solutions trouvées :
 
 Remarques :
 - Certains jeux n'ont ni catégorie ni description (env 200)
+
+**Réunion** :
+- Utiliser CountVectorizer plutôt que Tfidf sur les descriptions
+- Pour les catégories, ne pas sélectionner qu'une seule par jeu car perte d'information. Faire du multilabel (one vs all puis ranking label)
+- Oublier la génération de catégorie
+- Jouer sur les paramètres de la prédiction (SVM -> pénalisation, Random Forest -> nombre d'arbres et profondeur)
+- Conserver les mots peu fréquents pour la classification/prédiction, peut aussi apporter des infos
+- Pour tester plusieurs pipelines et modèles : stocker les différentes pipelines sur disque, créer une fonction qui permet de changer les paramètres et les appliquer aux modèles avec différents paramètres
+- Faire un test déséquilibré avec la vraie distribution des données afin d'être en accord avec la réalité
+- A faire : recommandation (compléter notebook et lire document)
+- Content based : proche des k-nn, regarde le contenu des items
+- Filtrage collaboratif : approche bigraphe, regarde les appréciations des items
+- Ou système hybride
+
 
 
