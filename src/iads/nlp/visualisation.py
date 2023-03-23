@@ -11,7 +11,7 @@ def get_wordcloud(data, stop_words):
     counts = np.array(vectors.sum(axis=0))[0]
 
     dico = dict()
-    words = vectorizer.get_feature_names()
+    words = vectorizer.get_feature_names_out()
 
     for i in range(len(words)):
         w = words[i]
