@@ -86,5 +86,27 @@ Remarques :
 - Filtrage collaboratif : approche bigraphe, regarde les appréciations des items
 - Ou système hybride
 
+## Semaine 4 (20/03) -- Découverte systèmes de recommandation
+Avancement :
+- Création matrice item-user
+
+Remarque : 
+- Principe collaborative filtering : apprendre des profils d'utilisateurs et d'items puis prédire une note. Le but étant de recommander les items correspondant aux meilleures notes par la suite
+
+**Réunion** :
+- Comparer content-based et filtrage collaboratif
+- Garder uniquement quelques utilisateurs (15-20, qui ont le plus noté) et les jeux qui ont le plus d'avis
+- Tester les algos "surprise" du notebook
+- Problème si on veut conserver les 5 items qui ont reçu la meilleure prédiction de note : on risque de prédire toujours la même chose. Solution : prédire 3 items de la même cat, 1 d'une cat proche et 1 d'un cat très éloignée par ex
+- Utiliser algo BPR (Bayesian Personalized Ranking) : donne un score entre 0 et 1 si la personne risque d'apprécier l'item ou non. Utile car la préférence ne s'exprime pas qu'à traver les notes mais aussi à travers ce qu'ils notes (un certain type de jeu par ex)
+- Comparer avec les algos de factorisation matricielle : prédit notes évaluées au sens des moindres carrés
+- Pour comparer, sortir les items prédits des deux méthodes et les comparer (nous dira seulement à quel point les algos font la même chose ou non)
+- Réutiliser le boulot qui a été fait sur les catégories
+- Etudier les variantes de la factorisation matricielle
+- Attention : risque de prédire uniquement une note (5) et risque de sur-apprentissage car matrices très sparses donc + de param que de notes à prédire.
+- Solution : réduire taille matrice et régulariser (reconstruire les notes en minimisant l'erreur au sens des MSE et en minimisant la norme des matrices)
+- On pourrait aussi ajouter des colonnes et apprendre un profil pour des cat de jeux
 
 
+## Semaine 5 (27/03) -- Prise en main filtrage collaboratif
+Avancement :
