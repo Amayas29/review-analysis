@@ -110,3 +110,22 @@ Remarque :
 
 ## Semaine 5 (27/03) -- Prise en main filtrage collaboratif
 Avancement :
+- Distribution des notes
+- Tri des jeux avec un nb d'avis < à 5
+- Test sur différents algorithmes :
+- - Baseline
+- - SVD & SVD ++ (GridSearch sur le nb de facteurs)
+- - KNN (GridSearch sur k)
+- - SlopeOne
+- Meilleur algo en fonction de MSE
+- Test reco avec les différents algos
+
+**Réunion** :
+- Vérifier que lorsqu'on sépare des jeux en différentes versions il s'agisse bien d'extensions et non simplement d'une autre référence. Si autre référence (donc 2 jeux identiques), merger les deux et récupérer la dernière note de l'utilisateur s'il a noté les deux ou faire une moyenne
+- Pour réduire le nb de jeux et utilisateurs : procéder par itérations sur les jeux et les utilisateurs (en veillant à ne pas se retrouver avec une base trop pauvre)
+- n factors trop grand pour SVD, aller de 10 à 50 pour éviter sur-apprentissage (peut être + grand si on touche la reg)
+- Changer paramètres de régularisation pour SVD (si lr diminue, nb epoch augmente)
+- Trop sparse pour KNN, passer par cosine ?
+- Les métriques MSE et RMSE sont pas ouf pcq dans notre cas il suffirait de prédire une note entre 8 et 10 pour minimiser le cout, donc essayer MRR, MAP et MDCG (prend plus en compte le rang et pénalise plus les erreurs)
+- Faire de la visualisation et interprétation : t-sne des représentations latentes (des jeux)
+- Similarité de contenu (content-based sur cat et descr avec cosine, utiliser graphe knn)
