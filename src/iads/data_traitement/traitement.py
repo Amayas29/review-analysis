@@ -202,6 +202,7 @@ def onehot_ages(arr):
 def onehot_playes(arr):
 
     arr["solo"] = 0
+    arr["duo"] = 0
     arr["multi"] = 0
 
     try:
@@ -215,12 +216,16 @@ def onehot_playes(arr):
         if min_j == 1:
             arr["solo"] = 1
 
-        if max_j > 1:
+        if min_j == 2 or max_j == 2 :
+            arr["duo"] = 1
+
+        if max_j > 2:
             arr["multi"] = 1
 
         return arr
 
     except Exception:
+        arr["duo"] = 1
         arr["multi"] = 1
         arr["solo"] = 1
         return arr
