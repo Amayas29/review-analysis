@@ -37,7 +37,7 @@ def get_cosine_matrix(df,col):
         tfidf = TfidfVectorizer()
         matrix = tfidf.fit_transform(df[[col]].apply(lambda x: ' '.join(x), axis=1))
 
-    elif col in [['enfant', 'ado', 'adulte'],['solo', 'multi']] :
+    elif col in [['enfant', 'ado', 'adulte'],['solo', 'duo', 'multi']] :
         matrix = np.vstack([row.to_numpy().ravel() for _, row in df[col].iterrows()])
         
     else :
