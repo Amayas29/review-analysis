@@ -104,10 +104,13 @@ def gs_pred(dict_data, model, param_grid, plot=True):
         plt.plot(gs.cv_results["mean_test_rmse"])
         params = gs.cv_results["params"]
         plt.xticks(np.arange(len(params)), params, rotation=90)
+        plt.ylim(min(gs.cv_results["mean_test_rmse"]) - 1, max(gs.cv_results["mean_test_rmse"]) + 1)
         plt.show()
 
     predictions = get_user_predictions(model, dict_data)
-    print(f"MRR : {mrr(predictions)}")
+    gs_mrr = mrr(predictions)
+    print(f"MRR : {gs_mrr}")
+    print(f"Rang du jeu : {1/gs_mrr}")
 
     return model
 
