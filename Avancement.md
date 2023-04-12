@@ -129,3 +129,22 @@ Avancement :
 - Les métriques MSE et RMSE sont pas ouf pcq dans notre cas il suffirait de prédire une note entre 8 et 10 pour minimiser le cout, donc essayer MRR, MAP et MDCG (prend plus en compte le rang et pénalise plus les erreurs)
 - Faire de la visualisation et interprétation : t-sne des représentations latentes (des jeux)
 - Similarité de contenu (content-based sur cat et descr avec cosine, utiliser graphe knn)
+
+## Semaine 6 (03/04) -- Suite filtrage collaboratif et content based
+Avancement :
+
+**Réunion** : 
+- Baseline : faire varier encore + la reg
+- Se poser la question : est ce qu'on bat l'algo naïf qui sort toujours la moyenne?
+- Vérifier qu'on est pas juste en train de prédire les items les + populaires
+- Augmenter reg_u et reg_i en fonction du nombre d'avis moyen par jeu
+- Mettre la perf train/test pour voir sur/sous apprentissage
+- Heatmap correlation user/item pour filtrage co pour param optimaux
+- Imshow à la place des courbes
+- Revoir le knn, pas normal qu'il soit aussi mauvais
+- T-SNE de sklearn (scatter plot) avec couleur des points en fonction de la catégorie (sûrement mieux qu'avec tensorflow)
+- Prendre du recul pour "vendre" le système
+- Démarrage à froid, pour faire des premières recommandations en justifiant
+- Co-clustering pour matrices de similarité
+- Laisser tomber tous les autres poids sauf description? Utiliser des clusters de catégories
+- Plus proches voisins pour l'analyse quantitative pour content-based (avec les notes par ex)
