@@ -1,4 +1,5 @@
 from surprise.model_selection import GridSearchCV
+from surprise.accuracy import rmse
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity, pairwise_kernels
 
@@ -90,27 +91,73 @@ def get_user_predictions(model, data):
     return user_jeux_preference
 
 
-def gs_pred(dict_data, model, param_grid, plot=True):
-    gs = GridSearchCV(model, param_grid, measures=["rmse"], cv=5)
+def gs_pred(dict_data, model, param_grid, algo_naif_score, plot=True, mrr=False, imshow=False, param1=None, param2=None):
+    gs = GridSearchCV(model, param_grid, measures=[
+                      "rmse"], cv=5,  return_train_measures=True, n_jobs=-1)
+
     gs.fit(dict_data["data"])
 
     model = gs.best_estimator["rmse"]
     model.fit(dict_data["data"].build_full_trainset())
 
-    print(gs.best_params["rmse"])
-
     if plot:
-        plt.figure(figsize=(10, 10))
-        plt.plot(gs.cv_results["mean_test_rmse"])
         params = gs.cv_results["params"]
+
+        fig_width = len(params)
+        fig_height = 4
+
+        plt.figure(figsize=(fig_width, fig_height))
+
+        plt.plot(gs.cv_results["mean_test_rmse"],
+                 label=f"rmse {model.__class__.__name__} test")
+
+        plt.plot(gs.cv_results["mean_train_rmse"],
+                 label=f"rmse {model.__class__.__name__} train")
+
+        l_algo_naif_score = [algo_naif_score] * len(params)
+        plt.plot(l_algo_naif_score, label="rmse algo naif")
+
+        plt.title('Evolution de la rmse en fonction des parametres')
+
         plt.xticks(np.arange(len(params)), params, rotation=90)
-        plt.ylim(min(gs.cv_results["mean_test_rmse"]) - 1, max(gs.cv_results["mean_test_rmse"]) + 1)
+        plt.ylim(min(gs.cv_results["mean_test_rmse"]) - 1,
+                 max(gs.cv_results["mean_test_rmse"]) + 1)
+
+        plt.legend()
         plt.show()
 
-    predictions = get_user_predictions(model, dict_data)
-    gs_mrr = mrr(predictions)
-    print(f"MRR : {gs_mrr}")
-    print(f"Rang du jeu : {1/gs_mrr}")
+    if mrr:
+        predictions = get_user_predictions(model, dict_data)
+        gs_mrr = mrr(predictions)
+
+        print(f"RMSE : {gs.best_params['rmse']}")
+        print(f"MRR : {gs_mrr}")
+        print(f"Rang du jeu : {1/gs_mrr}")
+
+    if imshow:
+        if "bsl_options" in gs.cv_results["params"][0]:
+
+            reg_us = [d['bsl_options'][param1]
+                      for d in gs.cv_results["params"]]
+
+            reg_is = [d['bsl_options'][param2]
+                      for d in gs.cv_results["params"]]
+
+        else:
+            reg_us = [d[param1] for d in gs.cv_results["params"]]
+            reg_is = [d[param2] for d in gs.cv_results["params"]]
+
+        result = pd.DataFrame(
+            {param1: reg_us, param2: reg_is, 'score': gs.cv_results["mean_test_rmse"]})
+
+        param1_vals = sorted(result[param1].unique())
+        param2_vals = sorted(result[param2].unique())
+
+        score_vals = np.zeros((len(param1_vals), len(param2_vals)))
+        for i, p1 in enumerate(param1_vals):
+            for j, p2 in enumerate(param2_vals):
+                score_vals[i, j] = result[(result[param1] == p1) & (
+                    result[param2] == p2)]['score'].values[0]
 
     return model
 
