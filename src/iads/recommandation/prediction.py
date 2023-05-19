@@ -91,77 +91,6 @@ def get_user_predictions(model, data):
     return user_jeux_preference
 
 
-def gs_pred(dict_data, model, param_grid, algo_naif_score, plot=True, mrr=False, imshow=False, param1=None, param2=None):
-    gs = GridSearchCV(model, param_grid, measures=[
-                      "rmse"], cv=5,  return_train_measures=True, n_jobs=-1)
-
-    gs.fit(dict_data["data"])
-
-    model = gs.best_estimator["rmse"]
-    model.fit(dict_data["data"].build_full_trainset())
-
-    if plot:
-        params = gs.cv_results["params"]
-
-        fig_width = len(params)
-        fig_height = 4
-
-        plt.figure(figsize=(fig_width, fig_height))
-
-        plt.plot(gs.cv_results["mean_test_rmse"],
-                 label=f"rmse {model.__class__.__name__} test")
-
-        plt.plot(gs.cv_results["mean_train_rmse"],
-                 label=f"rmse {model.__class__.__name__} train")
-
-        l_algo_naif_score = [algo_naif_score] * len(params)
-        plt.plot(l_algo_naif_score, label="rmse algo naif")
-
-        plt.title('Evolution de la rmse en fonction des parametres')
-
-        plt.xticks(np.arange(len(params)), params, rotation=90)
-        plt.ylim(min(gs.cv_results["mean_test_rmse"]) - 1,
-                 max(gs.cv_results["mean_test_rmse"]) + 1)
-
-        plt.legend()
-        plt.show()
-
-    if mrr:
-        predictions = get_user_predictions(model, dict_data)
-        gs_mrr = mrr(predictions)
-
-        print(f"RMSE : {gs.best_params['rmse']}")
-        print(f"MRR : {gs_mrr}")
-        print(f"Rang du jeu : {1/gs_mrr}")
-
-    if imshow:
-        if "bsl_options" in gs.cv_results["params"][0]:
-
-            reg_us = [d['bsl_options'][param1]
-                      for d in gs.cv_results["params"]]
-
-            reg_is = [d['bsl_options'][param2]
-                      for d in gs.cv_results["params"]]
-
-        else:
-            reg_us = [d[param1] for d in gs.cv_results["params"]]
-            reg_is = [d[param2] for d in gs.cv_results["params"]]
-
-        result = pd.DataFrame(
-            {param1: reg_us, param2: reg_is, 'score': gs.cv_results["mean_test_rmse"]})
-
-        param1_vals = sorted(result[param1].unique())
-        param2_vals = sorted(result[param2].unique())
-
-        score_vals = np.zeros((len(param1_vals), len(param2_vals)))
-        for i, p1 in enumerate(param1_vals):
-            for j, p2 in enumerate(param2_vals):
-                score_vals[i, j] = result[(result[param1] == p1) & (
-                    result[param2] == p2)]['score'].values[0]
-
-    return model
-
-
 def get_cosine_matrix(df, col):
     if col in ["description", "categories"]:
         tfidf = TfidfVectorizer()
@@ -172,7 +101,8 @@ def get_cosine_matrix(df, col):
 
     else:
         matrix = TfidfVectorizer().fit_transform(
-            df[col].apply(lambda x: " ".join(x), axis=1).values)
+            df[col].apply(lambda x: " ".join(x), axis=1).values
+        )
 
     similarity_matrix = cosine_similarity(matrix)
     np.fill_diagonal(similarity_matrix, 1)
@@ -190,7 +120,8 @@ def get_kernel_matrix(df, col, kernel):
 
     else:
         matrix = TfidfVectorizer().fit_transform(
-            df[col].apply(lambda x: " ".join(x), axis=1).values)
+            df[col].apply(lambda x: " ".join(x), axis=1).values
+        )
 
     similarity_matrix = pairwise_kernels(matrix, metric=kernel)
     np.fill_diagonal(similarity_matrix, 1)
@@ -202,7 +133,7 @@ def graphe_knn(matrix, k=5):
     G = nx.Graph()
 
     for i in tqdm(range(matrix.shape[0])):
-        neighbors = matrix[i].argsort()[-k-1:-1][::-1]
+        neighbors = matrix[i].argsort()[-k - 1 : -1][::-1]
 
         for neighbor in neighbors:
             weight = matrix[i][neighbor]
@@ -212,5 +143,5 @@ def graphe_knn(matrix, k=5):
     pos = nx.spring_layout(G)
     nx.draw_networkx_nodes(G, pos, node_size=50)
     nx.draw_networkx_edges(G, pos, alpha=0.5)
-    plt.axis('off')
+    plt.axis("off")
     plt.show()
