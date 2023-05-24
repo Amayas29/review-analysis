@@ -3,7 +3,6 @@ import nltk
 from spacy.lang.fr.stop_words import STOP_WORDS
 import re
 import spacy
-from translate import Translator
 from langdetect import detect
 import string
 
@@ -79,24 +78,3 @@ def lemmatize_tokens(tokens):
     docs = list(nlp.pipe(tokens, disable=["parser", "ner"]))
     tokens_lem = [doc[0].lemma_ for doc in docs]
     return tokens_lem
-
-
-def pos_tagging(tokens):
-    doc = nlp(tokens)
-    return [(d.text, d.pos_) for d in doc]
-
-
-translator = Translator(to_lang="fr")
-
-
-def traduire_phrase(phrase):
-    try:
-        phrase_lang = detect(phrase)
-
-        if phrase_lang != "fr":
-            return translator.translate(phrase)
-
-        return phrase
-
-    except Exception:
-        return phrase

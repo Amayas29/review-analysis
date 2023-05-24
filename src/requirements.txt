@@ -9,5 +9,9 @@ wordcloud
 sklearn
 matplotlib
 langdetect
-translate
 tqdm
+unidecode
+surprise
+networkx
+warnings
+lightfm
